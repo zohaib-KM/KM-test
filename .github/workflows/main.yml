@@ -29,11 +29,11 @@ jobs:
         HOST: ${{ secrets.EC2_HOST }}
         USERNAME: ${{ secrets.EC2_USER }}
         SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-        DESTINATION: /var/www/html  # The directory where Nginx serves your app
+        TEMP_DIR: /home/${{ secrets.EC2_USER }}/temp_build
+        DESTINATION: /var/www/html
       run: |
         echo "${SSH_KEY}" > key.pem
         chmod 600 key.pem
-        
         ssh -o StrictHostKeyChecking=no -i key.pem ${USERNAME}@${HOST} "mkdir -p ${TEMP_DIR}"
         scp -o StrictHostKeyChecking=no -i key.pem -r build/* ${USERNAME}@${HOST}:${TEMP_DIR}
         ssh -o StrictHostKeyChecking=no -i key.pem ${USERNAME}@${HOST} "sudo cp -r ${TEMP_DIR}/* ${DESTINATION} && rm -rf ${TEMP_DIR}"
