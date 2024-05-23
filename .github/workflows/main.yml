@@ -33,5 +33,8 @@ jobs:
       run: |
         echo "${SSH_KEY}" > key.pem
         chmod 600 key.pem
-        scp -o StrictHostKeyChecking=no -i key.pem -r build/* ${USERNAME}@${HOST}:${DESTINATION}
+        
+        ssh -o StrictHostKeyChecking=no -i key.pem ${USERNAME}@${HOST} "mkdir -p ${TEMP_DIR}"
+        scp -o StrictHostKeyChecking=no -i key.pem -r build/* ${USERNAME}@${HOST}:${TEMP_DIR}
+        ssh -o StrictHostKeyChecking=no -i key.pem ${USERNAME}@${HOST} "sudo cp -r ${TEMP_DIR}/* ${DESTINATION} && rm -rf ${TEMP_DIR}"
         ssh -o StrictHostKeyChecking=no -i key.pem ${USERNAME}@${HOST} "sudo systemctl restart nginx"
