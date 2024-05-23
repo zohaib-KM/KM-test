@@ -12,7 +12,7 @@ function App() {
         <h1>
             Zohaib Hamdani Kryptomind      </h1>
         <p>
-          Devops
+          DEPLOYMENT USING LINUX
         </p>
         <p>
           CI/CD Github Actions
