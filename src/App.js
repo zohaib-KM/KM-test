@@ -9,13 +9,13 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload!!!!.
         </p>
+        <h1>
+            Zohaib Hamdani Kryptomind      </h1>
         <p>
-          This is a change code app       </p>
-        <p>
-          This is a sample react app!
+          Devops
         </p>
         <p>
-          This is a sample react app!
+          CI/CD Github Actions
         </p>
         <a
           className="App-link"
