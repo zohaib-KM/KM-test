@@ -1,0 +1,37 @@
+name: Deploy React App to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14' # Use the version of Node.js your project requires
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build React app
+      run: npm run build
+
+    - name: Deploy to EC2
+      env:
+        HOST: ${{ secrets.EC2_HOST }}
+        USERNAME: ${{ secrets.EC2_USER }}
+        SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        DESTINATION: /var/www/html  # The directory where Nginx serves your app
+      run: |
+        echo "${SSH_KEY}" > key.pem
+        chmod 600 key.pem
+        scp -o StrictHostKeyChecking=no -i key.pem -r build/* ${USERNAME}@${HOST}:${DESTINATION}
+        ssh -o StrictHostKeyChecking=no -i key.pem ${USERNAME}@${HOST} "sudo systemctl restart nginx"
